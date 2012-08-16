@@ -6,7 +6,7 @@ Add a countdown to a specific time and date to a comment. Pick from different di
 1.0.0, initial release
 
 ## Details
-See [http://vanillaforums.org/addon/guestdefaultroute-plugin](http://vanillaforums.org/addon/guestdefaultroute-plugin)
+See [http://vanillaforums.org/addon/countdown-plugin](http://vanillaforums.org/addon/countdown-plugin)
 
 ## Installation
 Place the unzipped plugin folder in your `vanilla/plugins` folder and then activate using the Dashboard.  
