@@ -4,7 +4,7 @@
 $PluginInfo['Countdown'] = array(
 	'Name' => 'Countdown',
 	'Description' => 'Add a countdown to a specific time and date to a comment. Pick from different display types.',
-	'Version' 	=>	 '1.0.0',
+	'Version' 	=>	 '1.1.0',
 	'Author' 	=>	 "Matt Sephton",
 	'AuthorEmail' => 'matt@gingerbeardman.com',
 	'AuthorUrl' =>	 'http://www.vanillaforums.org/profile/matt',
@@ -20,12 +20,15 @@ class Countdown extends Gdn_Plugin {
 	public function SettingsController_Countdown_Create($Sender, $Args = array()) {
 		$Sender->Permission('Garden.Settings.Manage');
 		$Sender->SetData('Title', T('Countdown'));
+		
+		$tzlist[] = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
+		$timezones = array_combine($tzlist[0], $tzlist[0]);
 
 		$Cf = new ConfigurationModule($Sender);
 		$Cf->Initialize(array(
-			'Plugins.Countdown.Tag' => array('Description' => 'Text to replace with countdown widget', 'Control' => 'TextBox', 'Default' => '[COUNTDOWN]'),
-			'Plugins.Countdown.Time' => array('Description' => 'uses <a href="http://php.net/manual/en/function.strtotime.php">strtotime</a>', 'Control' => 'TextBox', 'Default' => '00:00:00 19 August 2012'),
-			'Plugins.Countdown.Timezone' => array('Description' => 'see <a href="http://uk.php.net/manual/en/timezones.php">list of supported timezones</a>', 'Control' => 'TextBox', 'Default' => 'Europe/London'),
+			'Plugins.Countdown.Tag' => array('Description' => 'The following text will be replaced with the countdown widget', 'Control' => 'TextBox', 'Default' => '[COUNTDOWN]'),
+			'Plugins.Countdown.Time' => array('Description' => 'Accepts most English textual date and time descriptions, see <a href="http://php.net/manual/en/function.strtotime.php">strtotime</a>', 'Control' => 'TextBox', 'Default' => '00:00:00 19 August 2012'),
+			'Plugins.Countdown.Timezone' => array('Control' => 'DropDown', 'Items' => $timezones, 'Default' => 'UTC'),
 			'Plugins.Countdown.Digits' => array('Control' => 'DropDown', 'Items' => array('digits' => 'Original', 'digits_transparent' => 'Original Transparent', 'digits_inverted' => 'Original Transparent Inverted', 'digits' => 'Original', 'digits2' => 'LED', 'digits2_blue' => 'LED Blue', 'digits2_green' => 'LED Green', 'digits2_orange' => 'LED Orange', 'digits2_purple' => 'LED Purple', 'digits2_red' => 'LED Red', 'digits2_yellow' => 'LED Yellow'))
 		));
 
@@ -46,7 +49,7 @@ class Countdown extends Gdn_Plugin {
 		$CountdownDigits = (C('Plugins.Countdown.Digits')) ? C('Plugins.Countdown.Digits') : 'digits';
 
 		// timezone
-		$CountdownTimezone = (C('Plugins.Countdown.Timezone')) ? C('Plugins.Countdown.Timezone') : 'Europe/London';
+		$CountdownTimezone = (C('Plugins.Countdown.Timezone')) ? C('Plugins.Countdown.Timezone') : 'UTC';
 		date_default_timezone_set($CountdownTimezone);
 
 		// time
@@ -74,7 +77,7 @@ class Countdown extends Gdn_Plugin {
 		if (!C('Plugins.Countdown.Tag')) {
 			$CountdownTag = '[COUNTDOWN]';
 		} else {
-			$CountdownTag = strtoupper(C('Plugins.Countdown.Tag'));
+			$CountdownTag = C('Plugins.Countdown.Tag');
 		}
 
 		// get img
