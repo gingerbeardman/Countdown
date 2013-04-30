@@ -3,6 +3,7 @@
 Add a countdown to a specific time and date to a comment. Pick from different display types.
 
 ## Changelog
+1.2.0, change DateTimeZone::listIdentifiers code, added small digit images  
 1.1.0, added timezone dropdown and fixed tag case bug  
 1.0.0, initial release  
 
